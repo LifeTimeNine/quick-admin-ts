@@ -1,0 +1,110 @@
+
+[data-theme="black"] {
+  // 登录背景色
+  --login-bg: #0d1117;
+  // 登录页面标题颜色
+  --login-title: #c9d1d9;
+  // 登录页面输入框背景颜色
+  --login-input-bg: #0d1117;
+  // 登录页面输入框边框颜色
+  --login-input-border: #8b949e;
+  // 登录页面输入框图标颜色
+  --login-input-icon: #889aa4;
+  // 登录页面输入框文字颜色
+  --login-input-color: #ffffff;
+  // 菜单文字颜色
+  --menu-text: #c9d1d9;
+  // 菜单选中状态颜色
+  --menu-active-text:#409EFF;
+  // 二级菜单选中状态颜色
+  --sub-menu-active-text:#409EFF;
+  // 菜单背景
+  --menu-bg: #0d1117;
+  // 菜单 Hover 背景
+  --menu-hover-bg: #263445;
+  // 二级菜单背景颜色
+  --sub-menu-bg:#050708;
+  // 二级菜单 Hover 颜色
+  --sub-menu-hover-bg:#001528;
+  // 头部导航背景色
+  --header-bg: #161b22;
+  // 基础颜色
+  --el-color-primary: #409eff;
+  --el-color-primary-light-3: #79bbff;
+  --el-color-primary-light-5: #6f9ecc;
+  --el-color-primary-light-7: #7790aa;
+  --el-color-primary-light-8: #5c6166;
+  --el-color-primary-light-9: #3d475a;
+  --el-color-primary-dark-2: #337ecc;
+  --el-color-success: #67c23a;
+  --el-color-success-light-3: #95d475;
+  --el-color-success-light-5: #84b86d;
+  --el-color-success-light-7: #778670;
+  --el-color-success-light-8: #646b60;
+  --el-color-success-light-9: #3e4d37;
+  --el-color-success-dark-2: #529b2e;
+  --el-color-warning: #e6a23c;
+  --el-color-warning-light-3: #eebe77;
+  --el-color-warning-light-5: #d1ad78;
+  --el-color-warning-light-7: #867d70;
+  --el-color-warning-light-8: #8f8475;
+  --el-color-warning-light-9: #74634b;
+  --el-color-warning-dark-2: #b88230;
+  --el-color-danger: #f56c6c;
+  --el-color-danger-light-3: #f89898;
+  --el-color-danger-light-5: #c57878;
+  --el-color-danger-light-7: #945858;
+  --el-color-danger-light-8: #6b4646;
+  --el-color-danger-light-9: #492222;
+  --el-color-danger-dark-2: #c45656;
+  --el-color-error: #f56c6c;
+  --el-color-error-light-3: #f89898;
+  --el-color-error-light-5: #fab6b6;
+  --el-color-error-light-7: #8f6262;
+  --el-color-error-light-8: #7e3737;
+  --el-color-error-light-9: #552222;
+  --el-color-error-dark-2: #c45656;
+  --el-color-info: #909399;
+  --el-color-info-light-3: #b1b3b8;
+  --el-color-info-light-5: #c8c9cc;
+  --el-color-info-light-7: #dedfe0;
+  --el-color-info-light-8: #e9e9eb;
+  --el-color-info-light-9: #f4f4f5;
+  --el-color-info-dark-2: #73767a;
+  --el-text-color-primary: #e1e6eb;
+  --el-text-color-regular: #c9d1d9;
+  --el-text-color-secondary: #989ea7;
+  --el-text-color-placeholder: #646668;
+  --el-text-color-disabled: #4b4d50;
+  --el-border-color-darker: #cdd0d6;
+  --el-fill-color: #12171f;
+  --el-fill-color-light: #080a0e;
+  --el-fill-color-lighter: #040608;
+  --el-fill-color-extra-light: #000102;
+  --el-fill-color-dark: #15171b;
+  --el-fill-color-darker: #121416;
+  --el-fill-color-blank: #12171f;
+  // 背景颜色
+  --el-bg-color: #010409;
+  --el-bg-color-page: #0d1117;
+  --el-bg-color-overlay: #0d1117;
+  // 边框颜色
+  --el-border-color: #30363d;
+  --el-border-color-light: #21262d;
+  --el-border-color-lighter: rgba(240,246,252,0.1);
+  // 阴影颜色
+  --el-box-shadow: 0px 12px 32px 4px rgba(255, 255, 255, 0.04),0px 8px 20px rgba(255, 255, 255, 0.08);
+  --el-box-shadow-light: 0px 0px 12px rgba(255, 255, 255, 0.12);
+  --el-box-shadow-lighter: 0px 0px 6px rgba(255, 255, 255, 0.12);
+  --el-box-shadow-dark: 0px 16px 48px 16px rgba(255, 255, 255, 0.08),0px 12px 32px rgba(255, 255, 255, 0.12),0px 8px 16px -8px rgba(255, 255, 255, 0.16);
+
+  --el-overlay-color: rgba(255, 255, 255, 0.8);
+  --el-overlay-color-light: rgba(255, 255, 255, 0.7);
+  --el-overlay-color-lighter: rgba(255, 255, 255, 0.5);
+  --el-mask-color: rgba(0, 0, 0, 0.9);
+  --el-mask-color-extra-light: rgba(0, 0, 0, 0.3);
+
+  --el-disabled-bg-color: var(--el-fill-color-light);
+  --el-disabled-text-color: var(--el-text-color-placeholder);
+  --el-disabled-border-color: var(--el-border-color-light);
+}

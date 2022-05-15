@@ -1,0 +1,37 @@
+.mce-container {
+  background-color: var(--el-fill-color-blank) !important;
+  border-color: var(--el-border-color) !important;
+  .mce-btn {
+    border: none;
+    background-color: var(--el-fill-color-blank);
+    button {
+      background-color: var(--el-fill-color-blank);
+      &:hover {
+        background-color: var(--el-color-primary-light-8);
+      }
+      .mce-txt,
+      .mce-caret,
+      .mce-ico {
+        color: var(--el-text-color-regular);
+      }
+    }
+  }
+  .mce-menu-item {
+    .mce-ico,
+    .mce-text {
+      color: var(--el-text-color-regular);
+    }
+    &.mce-disabled,
+    &.mce-disabled:hover {
+      background-color: var(--el-fill-color-blank);
+    }
+    &:hover,
+    &.mce-selected {
+      background-color: var(--el-color-primary-light-8);
+      .mce-ico,
+      .mce-text {
+        color: var(--el-text-color-regular);
+      }
+    }
+  }
+}
