@@ -76,7 +76,7 @@
 import { ComponentFormDialogInstance } from '@/interface'
 import { Lang } from '@/lang'
 import { FormParams, ListItem, NodeInfo } from '@/interface/systemMenu'
-import { add, edit, getUserMenuNodes, list as getList } from '@/apis/modules/systemMenu'
+import { add, edit, getUserMenuNodes, list as getList, setSort } from '@/apis/modules/systemMenu'
 import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import { ElLoadingService, ElMessage } from 'element-plus'
 import router from '@/router'
@@ -216,6 +216,18 @@ function getPaths(): PathInfo[] {
 function pathSearch(queryStr: string, callback: Function) {
   const paths = queryStr ? routePaths.value.filter((item: PathInfo) => item.path.indexOf(queryStr) === 0) : routePaths.value
   callback(paths)
+}
+function sortChange(item: ListItem) {
+  setSort({
+    id: item.id,
+    sort: item.sort
+  }).then(() => {
+    ElMessage.success(Lang.message('save_success'))
+  }).catch(() => {
+    ElMessage.error(Lang.message('save_fail'))
+  }).finally(() => {
+    refresh()
+  })
 }
 </script>
 

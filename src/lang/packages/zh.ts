@@ -24,6 +24,7 @@ export default {
     action_success: '操作@:success',
     refresh_success: '刷新@:success',
     save_success: '@:save@:success',
+    save_fail: '@:save@:fail',
     request_error: '服务器开小差了，请稍后再试',
     file_read_fail: '文件读取@:fail',
     upload_fail: '上传@:fail',

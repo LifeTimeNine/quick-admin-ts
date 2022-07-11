@@ -24,6 +24,7 @@ export default {
     action_success: 'operation @:success',
     refresh_success: 'refresh @:success',
     save_success: '@:save@:success',
+    save_fail: '@:save@:fail',
     request_error: 'The server is off, please try again later',
     file_read_fail: 'file read @:fail',
     upload_fail: 'upload @:fail',
