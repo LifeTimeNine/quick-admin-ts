@@ -51,7 +51,7 @@
             type="success"
             @click="$action($nodes.systemUser.modifyStatus, {id: row.id, enable: 1}, refresh)"
           >{{ $t('button.enable') }}</el-link>
-          <el-popconfirm :title="$t('message.delete_confirm')" @confirm="$action($nodes.systemUser.softDelete, {id: row.id}, refresh)">>
+          <el-popconfirm :title="$t('message.delete_confirm')" @confirm="$action($nodes.systemUser.softDelete, {id: row.id}, refresh)">
             <template #reference>
               <el-link v-auth="$nodes.systemUser.softDelete" type="danger">{{ $t('button.delete') }}</el-link>
             </template>
