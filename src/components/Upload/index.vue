@@ -234,7 +234,6 @@ function fileChange(e: UploadFile) {
       updateModelValue()
       emit('on-success', url, e.raw)
     }).catch(e => {
-      console.log(e)
       list.value[index].status = 7
       emit('on-fail', e)
     })
