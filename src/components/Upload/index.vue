@@ -199,14 +199,19 @@ function getProgressStatus(index: number): string {
 }
 function fileChange(e: UploadFile) {
   if (e.raw) {
-    const index = list.value.length
+    let index = 0
+    if (props.multiple) {
+      index = list.value.length
       list.value.push({
-      url: '',
-      name: e.raw.name,
-      status: 1,
-      progress: 0,
-      delete: false
-    })
+        url: '',
+        name: e.raw.name,
+        status: 1,
+        progress: 0,
+        delete: false
+      })
+    } else {
+      list.value[index].name = e.raw.name
+    }
     const upload = new Upload()
     upload.onMd5Before(() => {
       list.value[index].progress = 0
