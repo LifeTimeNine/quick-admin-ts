@@ -200,7 +200,7 @@ function getProgressStatus(index: number): string {
 function fileChange(e: UploadFile) {
   if (e.raw) {
     let index = 0
-    if (props.multiple) {
+    if (props.multiple || list.value.length === 0) {
       index = list.value.length
       list.value.push({
         url: '',
