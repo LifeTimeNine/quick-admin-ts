@@ -211,6 +211,7 @@ function fileChange(e: UploadFile) {
       })
     } else {
       list.value[index].name = e.raw.name
+      list.value[index].delete = false
     }
     const upload = new Upload()
     upload.onMd5Before(() => {
