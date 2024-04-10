@@ -6,7 +6,7 @@
 
 <script lang="ts" setup>
 import { ref, watch, watchEffect } from 'vue'
-import * as Language from 'element-plus/lib/locale/index'
+import * as Language from 'element-plus/es/locale/index'
 import { useI18n } from 'vue-i18n'
 import { getSymbol } from './lang'
 import { useStore } from 'vuex'

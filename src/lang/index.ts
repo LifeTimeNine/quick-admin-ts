@@ -1,6 +1,6 @@
 import { LanguageSymbol } from '@/interface'
 import storage from '@/utils/storage'
-import { createI18n, LocaleMessages, VueMessageType } from 'vue-i18n'
+import { createI18n, DefaultLocaleMessageSchema} from 'vue-i18n'
 
 export const languageStorageKey = 'system_language'
 
@@ -22,7 +22,7 @@ export const langs = require.context('./packages', false, /\.ts$/).keys().map((i
   return regRes ? regRes[1] : ''
 })
 
-const packages: LocaleMessages<VueMessageType> = {}
+const packages: { [x: string]: DefaultLocaleMessageSchema } = {}
 
 langs.forEach((item: string) => {
   packages[item] = require(`./packages/${item}`).default
