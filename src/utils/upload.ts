@@ -1,7 +1,7 @@
 import { info, partComplete, partInfo, partOptions as getPartOptions } from '@/apis/modules/upload'
 import { Lang } from '@/lang'
 import { KeyValue } from '@/interface'
-import Axios, { AxiosRequestHeaders, AxiosResponse } from 'axios'
+import Axios, { AxiosProgressEvent, AxiosRequestHeaders, AxiosResponse } from 'axios'
 import SparkMD5 from 'spark-md5'
 import { CompletePartInfo, PartInfoOption, PartOption, UploadInfo, UploadOption } from '@/interface/upload'
 
@@ -215,8 +215,8 @@ class Upload {
               method: options.method,
               headers: this.keyValueToObject(options.header) as AxiosRequestHeaders,
               data: body,
-              onUploadProgress: (progressEvent: ProgressEvent) => {
-                if (this.progressCallback) this.progressCallback(progressEvent.loaded, progressEvent.total)
+              onUploadProgress: (progressEvent: AxiosProgressEvent) => {
+                if (this.progressCallback) this.progressCallback(progressEvent.loaded, progressEvent.total || 0)
               }
             }).then((response: AxiosResponse) => {
               if (response.status === 200) {
@@ -314,7 +314,7 @@ class Upload {
                   method: option.method,
                   headers: this.keyValueToObject(option.header) as AxiosRequestHeaders,
                   data: data,
-                  onUploadProgress: (progressEvent: ProgressEvent) => {
+                  onUploadProgress: (progressEvent: AxiosProgressEvent) => {
                     completePart[option.part_number] = { completeSize: progressEvent.loaded, etag: null }
                     if (this.progressCallback) this.progressCallback(Object.values(completePart).map(item => item.completeSize).reduce((total, cur) => total + cur, 0), file.size)
                   }

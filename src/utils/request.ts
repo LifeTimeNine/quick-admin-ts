@@ -1,5 +1,5 @@
 import { apiAppName } from '@/settings'
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import { ElLoadingService, ElMessage } from 'element-plus'
 import { getToken } from './token'
 import store from '@/store'
@@ -60,9 +60,9 @@ interface ResponseData {
 
 // 请求拦截器
 request.interceptors.request.use(
-  (config: AxiosRequestConfig) => {
+  (config: InternalAxiosRequestConfig) => {
     if (config.headers) {
-      config.headers['Access-Token'] = getToken()
+      config.headers.Authorization = `Token ${getToken() || ''}`
       config.headers['Accept-Language'] = getSymbol().request
     }
     return config
@@ -92,7 +92,7 @@ request.interceptors.response.use(
       }
       return Promise.reject(message)
     } else {
-      return data
+      return data as unknown as AxiosResponse
     }
   },
   error => {
