@@ -62,7 +62,7 @@ interface ResponseData {
 request.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     if (config.headers) {
-      config.headers.Authorization = `Token ${getToken() || ''}`
+      config.headers['Access-Token'] = getToken()
       config.headers['Accept-Language'] = getSymbol().request
     }
     return config
