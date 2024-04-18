@@ -1,83 +1,92 @@
 <template>
   <div>
-    <data-list ref="list" :node="$nodes.systemConfig.list">
-      <template #search="{options}">
-        <el-form-item>
-          <el-input v-model="options.name" :placeholder="$t('config_name')" />
-        </el-form-item>
-        <el-form-item>
-          <el-input v-model="options.key" :placeholder="$t('config_key')" />
-        </el-form-item>
-      </template>
-      <template #actions>
-        <el-button v-auth="$nodes.systemConfig.add" type="primary" @click="onAdd">{{ $t('add') }}</el-button>
-      </template>
-      <template #list-column>
-        <el-table-column label="ID" prop="id" sortable="custom" />
-        <el-table-column :label="$t('name')" prop="name" sortable />
-        <el-table-column :label="$t('config_key')" prop="key" />
-        <el-table-column :label="$t('config_value')" v-slot="{row}">
-          <span v-if="row.type === 1">{{ row.value }}</span>
-          <template v-else-if="row.type === 2">
-            <el-tag v-for="(item, index) in row.value" :key="index" class="table-value-item">{{ item }}</el-tag>
+    <el-row :gutter="20">
+      <el-col v-for="(item, index) in list" :key="index" :span="6">
+        <el-card shadow="hover">
+          <template #header>
+            <div class="header">
+              <span>{{ item.name }}</span>
+              <el-link type="primary" @click="onEdit(item)">{{ $t('edit') }}</el-link>
+            </div>
           </template>
-          <template v-else-if="row.type === 3">
-            <el-tag v-for="(item, index) in Object.keys(row.value)" :key="index" class="table-value-item">{{ item }}: {{ row.value[item] }}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('action')" v-slot="{row}">
-          <el-link v-auth="$nodes.systemConfig.edit" type="primary" @click="onEdit(row)">{{ $t('button.edit') }}</el-link>
-          <el-popconfirm :title="$t('message.delete_confirm')" @confirm="$action($nodes.systemConfig.del, {id: row.id}, refresh)">
-            <template #reference>
-              <el-link v-auth="$nodes.systemConfig.del" type="danger">{{ $t('button.delete') }}</el-link>
+          <div class="value-content">
+            <template v-if="item.type === ValueType.TEXT">
+              <span class="value value-text">{{ item.value }}</span>
             </template>
-          </el-popconfirm>
-        </el-table-column>
-      </template>
-    </data-list>
-    <form-dialog ref="form" v-slot="{row}" width="60%" @save="save">
-      <el-form-item :label="$t('config_key')" prop="key">
-        <el-input v-model="row.key" />
-      </el-form-item>
+            <template v-else-if="item.type === ValueType.LIST">
+              <el-scrollbar>
+                <el-descriptions :column="1" border>
+                  <el-descriptions-item
+                    v-for="(v, i) in item.value"
+                    :key="i"
+                    :span="1"
+                    :label="i + 1"
+                    >
+                    {{ v }}
+                  </el-descriptions-item>
+                </el-descriptions>
+              </el-scrollbar>
+            </template>
+            <template v-else-if="item.type === ValueType.MAP">
+              <el-scrollbar>
+                <el-descriptions :column="1" border>
+                  <el-descriptions-item
+                    v-for="(v, i) in item.value"
+                    :key="i"
+                    :span="1"
+                    :label="i"
+                    >
+                    {{ v }}
+                  </el-descriptions-item>
+                </el-descriptions>
+              </el-scrollbar>
+            </template>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+    
+    <form-dialog ref="form" v-slot="{row}" width="600" @save="save">
       <el-form-item :label="$t('config_name')" prop="name">
-        <el-input v-model="row.name" />
-      </el-form-item>
-      <el-form-item :label="$t('type')" prop="type">
-        <el-select v-model="row.type" style="width: 100%" @change="typeChange">
-          <el-option :label="$t('string')" :value="1" />
-          <el-option :label="$t('list')" :value="2" />
-          <el-option :label="$t('maps')" :value="3" />
-        </el-select>
+        <el-input v-model="row.name" readonly />
       </el-form-item>
       <el-form-item :label="$t('value')" prop="value">
-        <template v-if="row.type === 1">
-          <el-input v-model="tempValue" />
+        <template v-if="row.type === ValueType.TEXT">
+          <el-input v-model="row.value" type="textarea" />
         </template>
-        <template v-if="row.type === 2">
-          <div v-for="(item, index) in tempValue" :key="index" class="value-list-items">
-            {{ index + 1 }}：
-            <el-input v-model="tempValue[index]" type="textarea" />
-            <svg-icon icon-class="delete-filled" @click="removeItem(index)" />
-          </div>
+        <template v-if="row.type === ValueType.LIST">
+          <el-scrollbar class="edit-list-scrollbar" ref="editListScrollbar">
+            <el-descriptions ref="editListDescription" :column="1" border>
+              <el-descriptions-item
+                v-for="(item, index) in editList"
+                :key="index"
+                :span="1"
+                :label="index + 1"
+                >
+                <div class="edit-value-item">
+                  <el-input v-model="editList[index]" type="textarea" />
+                  <svg-icon icon-class="delete-filled" @click="removeItem(index)" />
+                </div>
+              </el-descriptions-item>
+            </el-descriptions>
+          </el-scrollbar>
           <div class="add-btn-box">
             <el-button icon="el-icon-plus" class="add-btn" @click="addItem" />
           </div>
         </template>
-        <template v-if="row.type === 3">
-          <div v-for="(item, index) in tempValue" :key="index" class="value-map-items">
-            <div class="value-map-items-box">
-              <div class="value-map-items-label">
-                {{ $t('key') }}：<el-input v-model="tempValue[index].key" />
-              </div>
-              <div>
-                {{ $t('value') }}：<el-input v-model="tempValue[index].value" type="textarea" />
-              </div>
-            </div>
-            <svg-icon icon-class="delete-filled" @click="removeItem(index)" />
-          </div>
-          <div class="add-btn-box">
-            <el-button icon="el-icon-plus" class="add-btn" @click="addItem" />
-          </div>
+        <template v-if="row.type === ValueType.MAP">
+          <el-scrollbar class="edit-map-scrollbar">
+            <el-descriptions :column="1" border>
+              <el-descriptions-item
+                v-for="(item, index) in editMap"
+                :key="index"
+                :span="1"
+                :label="editMap[index].key"
+                >
+                <el-input v-model="editMap[index].value" type="textarea" />
+              </el-descriptions-item>
+            </el-descriptions>
+          </el-scrollbar>
         </template>
       </el-form-item>
     </form-dialog>
@@ -85,12 +94,12 @@
 </template>
 
 <script lang="ts">
-import { add, edit } from '@/apis/modules/systemConfig'
-import { ComponentDataListInstance, ComponentFormDialogInstance, KeyValue } from '@/interface'
-import { ItemInfo, ListQueryParams } from '@/interface/systemConfig'
+import { list as getList, add, edit } from '@/apis/modules/systemConfig'
+import { ComponentFormDialogInstance, KeyValue } from '@/interface'
+import { ItemInfo } from '@/interface/systemConfig'
 import { Lang } from '@/lang'
-import { ElLoadingService, ElMessage } from 'element-plus'
-import { defineComponent, ref, watch } from 'vue'
+import { DescriptionInstance, ElLoadingService, ElMessage, ScrollbarInstance } from 'element-plus'
+import { defineComponent, onMounted, ref } from 'vue'
 
 export default defineComponent({
   name: 'SystemConfig'
@@ -98,100 +107,70 @@ export default defineComponent({
 </script>
 
 <script lang="ts" setup>
-const list = ref<ComponentDataListInstance<ItemInfo, ListQueryParams>>()
+
+import { ValueType } from '@/interface/systemConfig'
+
+const list = ref<ItemInfo[]>([])
 const form = ref<ComponentFormDialogInstance<ItemInfo>>()
-const tempValue = ref<string|string[]|KeyValue<string>[]>()
-function refresh() {
-  if (list.value) list.value.refresh()
+const editList = ref<string[]>([])
+const editMap = ref<KeyValue<string>[]>([])
+const editListDescription = ref<DescriptionInstance>()
+const editListScrollbar = ref<ScrollbarInstance>()
+
+onMounted(() => {
+  init()
+})
+
+function init() {
+  getList().then(({ list: list_ }: {list: ItemInfo[]}) => {
+    list.value = list_
+  })
 }
-function onAdd() {
-  if (form.value) {
-    form.value.open({
-      key: '',
-      name: '',
-      type: 1,
-      value: ''
-    })
-    tempValue.value = ''
-  }
-}
+
+const tempValue = ref<string|string[]|KeyValue<string>[]>('')
+
 function onEdit(row: ItemInfo) {
-  const data: ItemInfo = {
-    id: row.id,
-    key: row.key,
-    name: row.name,
-    type: row.type,
-    value: row.value
-  }
-  if (row.type === 1) {
-    data.value = row.value
-    tempValue.value = row.value as string
-  } else if (row.type === 2) {
-    tempValue.value = [] as string[]
-    (row.value as string[]).forEach(item => {
-      (tempValue.value as string[]).push(item)
+  const data = Object.assign({}, row)
+  if (data.type === ValueType.LIST) {
+    data.value = (row.value as string[]).slice()
+    editList.value = data.value as string[]
+  } else if (data.type === ValueType.MAP) {
+    data.value = Object.assign({}, row.value)
+    const value = data.value as {[x: string]: string}
+    editMap.value = Object.keys(value).map(key => {
+      return {
+        key: key,
+        value: value[key]
+      }
     })
-  } else if (row.type === 3) {
-    tempValue.value = [] as KeyValue<string>[]
-    for (const key in row.value as {[key in string]:string}) {
-      tempValue.value.push({ key, value: (row.value as {[key in string]:string})[key] })
-    }
   }
-  if (form.value) {
-    form.value.open(data)
-  }
-}
-function typeChange(value: number) {
-  if (form.value) {
-    if (value === 1) {
-      form.value.row.value = ''
-      tempValue.value = ''
-    } else if (value === 2) {
-      form.value.row.value = [] as string[]
-      tempValue.value = [] as string[]
-    } else if (value === 3) {
-      form.value.row.value = {} as {[key in string]: string}
-      tempValue.value = [] as KeyValue<string>[]
-    }
-  }
+  form.value?.open(data)
 }
 function addItem() {
-  if (form.value) {
-    if (form.value.row.type === 2) {
-      (tempValue.value as string[]).push('')
-    } else if (form.value.row.type === 3) {
-      (tempValue.value as KeyValue<string>[]).push({ key: 'key', value: 'value' })
-    }
-  }
+  editList.value.push('')
+  editListDescription.value?.$nextTick(() => {
+    editListScrollbar.value?.setScrollTop(editListDescription.value?.$el.offsetHeight)
+  })
 }
 function removeItem(index: number) {
-  (tempValue.value as string[]|KeyValue<string>[]).splice(index, 1)
+  editList.value.splice(index, 1)
 }
-watch(
-  tempValue,
-  function(value) {
-    if (form.value) {
-      if (form.value.row.type === 1 || form.value.row.type === 2) {
-        form.value.row.value = value as string|string[]
-      } else if (form.value.row.type === 3) {
-        form.value.row.value = {} as {[key in string]: string}
-        (value as KeyValue<string>[]).forEach((item: KeyValue<string>) => {
-          if (form.value) (form.value.row.value as {[key in string]: string})[item.key] = item.value
-        })
-      }
-    }
-  },
-  {
-    deep: true
-  }
-)
 function save(row: ItemInfo, shutDown: Function) {
   const loading = ElLoadingService()
+  if (row.type === ValueType.LIST) {
+    row.value = editList.value
+  } else if (row.type === ValueType.MAP) {
+    const map: {[x: string]: string} = {}
+    editMap.value.forEach(item => {
+      map[item.key] = item.value
+    })
+    row.value = map
+  }
   const promise = row.id ? edit(row) : add(row)
   promise.then(() => {
     ElMessage.success(Lang.message('save_success'))
     shutDown()
-    refresh()
+    init()
   }).finally(() => {
     loading.close()
   })
@@ -199,37 +178,53 @@ function save(row: ItemInfo, shutDown: Function) {
 </script>
 
 <style lang="scss" scoped>
-.el-form :deep() {
-  .el-form-item__content {
-    display: inline-block;
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+.value-content {
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .value {
+    font-weight: bold;
+  }
+  .el-scrollbar {
+    width: 100%;
   }
 }
-.value-list-items,
-.value-map-items {
+
+.el-form {
+  .el-form-item__content {
+    display: block;
+    .el-scrollbar {
+      width: 100%;
+      max-height: 400px;
+      &.edit-list-scrollbar :deep() {
+        height: calc(100% - 32px);
+        .el-descriptions__label {
+          width: 3em;
+        }
+      }
+    }
+  }
+}
+
+.edit-value-item {
   display: flex;
-  width: 100%;
   align-items: center;
-  margin-bottom: .3em;
   .svg-icon {
-    width: 20px;
+    display: none;
     margin-left: .5em;
     cursor: pointer;
-    &:hover {
-      color: #F56C6C;
+    color: #F56C6C;
+  }
+  &:hover {
+    .svg-icon {
+      display: inline-block;
     }
   }
 }
-.value-map-items {
-  &-box {
-    width: 100%;
-    margin-bottom: .1em;
-    div {
-      display: flex;
-      flex-wrap: nowrap;
-    }
-  }
-}
-.add-btn-box {
-  width: 100%;
-}
+
 </style>

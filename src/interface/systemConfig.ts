@@ -1,3 +1,9 @@
+/** 值类型 */
+export enum ValueType {
+  TEXT = 1,
+  LIST = 2,
+  MAP = 3
+}
 
 /** 基础配置接口 */
 export interface BasicConfig {

@@ -25,7 +25,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .el-scrollbar {
-  position: initial;
   .main {
     padding: 20px;
     height: 100%;

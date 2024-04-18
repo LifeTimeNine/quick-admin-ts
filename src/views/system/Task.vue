@@ -154,7 +154,7 @@ const formRules = {
 }
 const form = ref<ComponentFormDialogInstance<FormParams>>()
 // eslint-disable-next-line no-undef
-let statusTimer: NodeJS.Timer
+let statusTimer: number
 const execLogOpened = ref<boolean>(false)
 const execLogTaskId = ref<number>()
 const outputOpened = ref<boolean>(false)

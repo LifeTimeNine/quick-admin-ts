@@ -211,7 +211,7 @@ function getPaths(): PathInfo[] {
     })
     return paths
   }
-  return getPaths_(router.options.routes)
+  return getPaths_(router.options.routes as RouteRecordRaw[])
 }
 function pathSearch(queryStr: string, callback: Function) {
   const paths = queryStr ? routePaths.value.filter((item: PathInfo) => item.path.indexOf(queryStr) === 0) : routePaths.value

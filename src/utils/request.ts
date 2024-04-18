@@ -3,8 +3,8 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosR
 import { ElLoadingService, ElMessage } from 'element-plus'
 import { getToken } from './token'
 import store from '@/store'
-import { useRoute, useRouter } from 'vue-router'
 import { getSymbol, Lang } from '@/lang'
+import router from '@/router'
 
 /**
  * 请求对象
@@ -62,7 +62,7 @@ interface ResponseData {
 request.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     if (config.headers) {
-      config.headers['Access-Token'] = getToken()
+      config.headers.Authorization = `Token ${getToken() || ''}`
       config.headers['Accept-Language'] = getSymbol().request
     }
     return config
@@ -86,7 +86,7 @@ request.interceptors.response.use(
         ElMessage.error(message)
         // 删除Token 转到登录页面
         store.dispatch('user/removeToken')
-        useRouter().replace({ name: 'Login', query: { redirect: useRoute().path } })
+        router.replace({ name: 'Login', query: { redirect: router.currentRoute.value.path } })
       } else {
         ElMessage.error(message)
       }

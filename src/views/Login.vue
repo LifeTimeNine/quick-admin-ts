@@ -80,7 +80,7 @@ function onLogin() {
         username: loginForm.username,
         password: SparkMD5.hash(loginForm.password)
       }).then(() => {
-        router.push({ path: redirect || '/' })
+        router.replace({ path: redirect || '/' })
       }).finally(() => {
         loading.value = false
       })

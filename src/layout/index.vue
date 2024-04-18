@@ -50,8 +50,10 @@ const sidebarOpened = computed<boolean>(() => {
     position: relative;
     box-shadow: var(--el-box-shadow-lighter);
     background-color: var(--header-bg);
+    z-index: 1;
   }
   .el-main {
+    position: relative;
     padding: 0;
   }
 }
