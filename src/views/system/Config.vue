@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row :gutter="20">
-      <el-col v-for="(item, index) in list" :key="index" :span="6">
+      <el-col v-for="(item, index) in list" :key="index" :span="6" :xl="6" :lg="8" :md="8" :sm="12" :xs="24">
         <el-card shadow="hover">
           <template #header>
             <div class="header">
@@ -181,6 +181,9 @@ function save(row: ItemInfo, shutDown: Function) {
 .header {
   display: flex;
   justify-content: space-between;
+}
+.el-card {
+  margin-bottom: 1em;
 }
 .value-content {
   height: 200px;
