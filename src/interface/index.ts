@@ -1,3 +1,4 @@
+import { Ref } from "vue"
 
 /** Key-Value 接口 */
 export interface KeyValue<T> {
@@ -57,5 +58,5 @@ export interface ComponentDataListInstance<R, Q> {
   /** 总数 */
   total: number
   /** 查询参数 */
-  query: Q
+  query: Ref<Q>
 }
