@@ -48,6 +48,7 @@ div:focus {
   outline: none;
 }
 
-.el-select {
-  min-width: 120px;
+/* 解决在行内模式的时候，Select的宽度丢失的问题 */
+.el-form.el-form--inline .el-select {
+  width: var(--el-form-inline-content-width);
 }
