@@ -177,15 +177,15 @@ function updateModelValue() {
 function imagePreviewClose() {
   imagePreviewOpened.value = false
 }
-function getProgress(index: number): number {
+function getProgress(index: number): string {
   if ([2, 3].includes(list.value[index].status)) {
-    return Math.round(list.value[index].progress / 2 * 100) / 100
+    return (Math.round(list.value[index].progress / 2 * 100) / 100).toFixed(2)
   } else if ([4, 5].includes(list.value[index].status)) {
-    return Math.round(list.value[index].progress / 2 * 100) / 100 + 50
+    return (Math.round(list.value[index].progress / 2 * 100) / 100 + 50).toFixed(2)
   } else if (list.value[index].status === 7) {
-    return 100
+    return '100'
   } else {
-    return 0
+    return '0'
   }
 }
 function getProgressStatus(index: number): string {

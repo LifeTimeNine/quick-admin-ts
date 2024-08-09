@@ -42,6 +42,20 @@ export const ErrorCode = {
   permission_denied: 10203
 }
 
+/**
+ * 请求内容类型
+ */
+export enum ContentType {
+  /** application/octet-stream */
+  CONTENT_TYPE_STREAM = 'application/octet-stream',
+  /** multipart/form-data */
+  CONTENT_TYPE_FORMDATA = 'multipart/form-data',
+  /** application/x-www-form-urlencoded */
+  CONTENT_TYPE_URLENCODEED = 'application/x-www-form-urlencoded',
+  /** application/json */
+  CONTENT_TYPE_JSON = 'application/json'
+}
+
 // 数据接口
 export interface Data {
   map: any

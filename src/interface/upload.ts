@@ -10,19 +10,23 @@ export interface InfoParams {
 export interface UploadOption {
   server: string
   method: string
+  content_type: string
   header: KeyValue<string>[]
+  query: KeyValue<string>[]
   body: KeyValue<string>[]
   file_key: string
 }
 
 /** 上传切片上传参数接口 */
 export interface PartOption {
-  header: KeyValue<string>[]
-  method: string
-  part_number: number
   server: string
+  method: string
+  content_type: string
+  header: KeyValue<string>[]
+  query: KeyValue<string>[]
   body?: KeyValue<string>[]
   file_key?: string
+  part_number: number
 }
 
 /** 上传接口切片参数 */

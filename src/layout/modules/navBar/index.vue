@@ -35,7 +35,7 @@
 
     <form-dialog ref="userInfoForm" v-slot="{row}" @save="userInfoSave">
       <el-form-item :label="$t('avatar')">
-        <upload v-model="row.avatar" :width="60" :height="60" />
+        <upload v-model="row.avatar" :width="60" :height="60" accept="image/*" />
       </el-form-item>
       <el-form-item :label="$t('username')">
         <el-input v-model="row.username" disabled />

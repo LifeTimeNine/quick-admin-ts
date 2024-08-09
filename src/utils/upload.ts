@@ -4,6 +4,7 @@ import { KeyValue } from '@/interface'
 import Axios, { AxiosProgressEvent, AxiosRequestHeaders, AxiosResponse } from 'axios'
 import SparkMD5 from 'spark-md5'
 import { CompletePartInfo, PartInfoOption, PartOption, UploadInfo, UploadOption } from '@/interface/upload'
+import { ContentType } from './request'
 
 type Md5Callback = (loaded: number, total: number) => void
 
@@ -208,8 +209,14 @@ class Upload {
             resolve(url)
           } else {
             if (this.afterCallback) this.afterCallback()
-            const body = this.keyValueToFormData(options.body)
-            body.append(options.file_key, file)
+              let body
+            if (options.content_type === ContentType.CONTENT_TYPE_FORMDATA) {
+              body = this.keyValueToFormData(options.body)
+              body.append(options.file_key, file)
+            } else {
+              body = this.slice(file, 0, file.size)
+            }
+            options.header.push({ 'key': 'Content-type', 'value': options.content_type })
             Axios.request({
               url: options.server,
               method: options.method,
@@ -303,12 +310,13 @@ class Upload {
                 const start = (option.part_number - 1) * partSize
                 const end = start + partSize >= file.size ? file.size : start + partSize
                 let data = null
-                if (option.body && option.file_key) {
-                  data = this.keyValueToFormData(option.body)
-                  data.append(option.file_key, this.slice(file, start, end))
+                if (option.content_type === ContentType.CONTENT_TYPE_FORMDATA) {
+                  data = this.keyValueToFormData(option.body!!)
+                  data.append(option.file_key!!, this.slice(file, start, end))
                 } else {
                   data = this.slice(file, start, end)
                 }
+                option.header.push({ 'key': 'Content-Type', 'value': option.content_type })
                 Axios.request({
                   url: option.server,
                   method: option.method,
