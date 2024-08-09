@@ -19,12 +19,12 @@
         />
         <span>{{ item.name }}</span>
         <svg-icon v-if="props.multiple && [6, 7].includes(item.status)" icon-class="close" class="close" @click="onRemove(index)" />
-        <el-progress v-if="![6, 7].includes(item.status)" type="line" :percentage="getProgress(index)" :stroke-width="3" :show-text="false" />
+        <el-progress v-if="![6, 7].includes(item.status)" type="line" :percentage="parseInt(getProgress(index))" :stroke-width="3" :show-text="false" />
       </li>
     </ul>
     <div v-else-if="props.type === 'image'" class="image-list">
       <div v-for="(item, index) in list" v-show="!item.delete" :key="index" class="image-list-item" :style="{width: `${props.width}px`, height: `${props.height}px`}">
-        <el-progress v-if="item.status !== 6" type="circle" :percentage="getProgress(index)" :status="getProgressStatus(index)" :width="progressWidth" />
+        <el-progress v-if="item.status !== 6" type="circle" :percentage="parseInt(getProgress(index))" :status="getProgressStatus(index)" :width="progressWidth" />
         <el-image v-if="item.status === 6" :src="item.url" fit="fill" :lazy="true" :style="{width: `${props.width}px`, height: `${props.height}px`}" />
         <div class="image-list-item-actions">
           <svg-icon icon-class="view" @click="openPreview(item.url)" />

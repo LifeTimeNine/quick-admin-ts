@@ -217,16 +217,20 @@ class Upload {
               body = this.slice(file, 0, file.size)
             }
             options.header.push({ 'key': 'Content-type', 'value': options.content_type })
+            const queryArr: string[] = []
+            options.query.forEach(item => {
+              queryArr.push(`${item['key']}=${item['value']}`)
+            })
             Axios.request({
-              url: options.server,
+              url: options.server + (queryArr.length > 0 ? `?${queryArr.join('&')}` : ''),
               method: options.method,
-              headers: this.keyValueToObject(options.header) as AxiosRequestHeaders,
+              headers: this.keyValueToObject(options.header.filter(item => item.key !== 'Host')) as AxiosRequestHeaders,
               data: body,
               onUploadProgress: (progressEvent: AxiosProgressEvent) => {
                 if (this.progressCallback) this.progressCallback(progressEvent.loaded, progressEvent.total || 0)
               }
             }).then((response: AxiosResponse) => {
-              if (response.status === 200) {
+              if (response.status === 200 || response.status === 204) {
                 if (this.afterCallback) this.afterCallback(url)
                 resolve(url)
               } else {
@@ -317,10 +321,14 @@ class Upload {
                   data = this.slice(file, start, end)
                 }
                 option.header.push({ 'key': 'Content-Type', 'value': option.content_type })
+                const queryArr: string[] = []
+                option.query.forEach(item => {
+                  queryArr.push(`${item['key']}=${item['value']}`)
+                })
                 Axios.request({
-                  url: option.server,
+                  url: option.server + (queryArr.length > 0 ? `?${queryArr.join('&')}` : ''),
                   method: option.method,
-                  headers: this.keyValueToObject(option.header) as AxiosRequestHeaders,
+                  headers: this.keyValueToObject(option.header.filter(item => item.key !== 'Host')) as AxiosRequestHeaders,
                   data: data,
                   onUploadProgress: (progressEvent: AxiosProgressEvent) => {
                     completePart[option.part_number] = { completeSize: progressEvent.loaded, etag: null }
