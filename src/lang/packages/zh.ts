@@ -118,6 +118,8 @@ export default {
   value: '值',
   hash_value: '哈希值',
   request_address: '请求地址',
+  request_header: '请求头',
+  session: 'Session',
   app_name: '应用名称',
   error_message: '异常消息',
   error_code: '异常码',
@@ -167,5 +169,9 @@ export default {
   execute_result: '执行结果',
   execute_time: '执行时间',
   last_login_ip: '最后登录IP',
-  last_login_time: '最后登录时间'
+  last_login_time: '最后登录时间',
+  remark: '备注',
+  make_as_processed: '标记为已处理',
+  processed: '已处理',
+  untreated: '未处理'
 }

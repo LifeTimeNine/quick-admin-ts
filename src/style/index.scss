@@ -52,3 +52,31 @@ div:focus {
 .el-form.el-form--inline .el-select {
   width: var(--el-form-inline-content-width);
 }
+
+/* 整个滚动条 */
+::-webkit-scrollbar {
+  width: 8px;               /* 滚动条的宽度 */
+  height: 8px;              /* 滚动条的高度，对水平滚动条有效 */
+  background-color: transparent; /* 滚动条的背景颜色 */
+}
+
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: var(--el-text-color-regular);
+}
+
+/* 滚动条滑块：悬停效果 */
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--el-text-color-secondary);
+}
+
+/* 滚动条滑块：激活时的效果 */
+::-webkit-scrollbar-thumb:active {
+  background-color: var(--el-text-color-secondary);
+}
+
+/* 滚动条按钮（上下箭头） */
+::-webkit-scrollbar-button {
+  display: none; /* 通常情况下不显示滚动条按钮 */
+}

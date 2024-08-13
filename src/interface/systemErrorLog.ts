@@ -16,17 +16,25 @@ export interface ListItem {
   error_message: string
   error_trace: string
   happen_num: number
-  happen_time: string
+  first_happen_time: string
   hash: string
   id: number
   last_happen_time: string
   path_info: string
-  request_param: any
+  request_param: {[key in string]: string}
   request_time: string
+  header: {[key in string]: string}
+  session: {[key in string]: string}
   resolveUser: {
     username: string
   }
   resolve_suid: number
   resolve_time: string
+  resolve_remark: string
   status: number
+}
+
+export interface ResolveParams {
+  id: number
+  resolve_remark: string
 }

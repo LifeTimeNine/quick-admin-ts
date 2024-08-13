@@ -118,6 +118,8 @@ export default {
   value: 'value',
   hash_value: 'hash',
   request_address: 'request address',
+  request_header: 'request haeder',
+  session: 'session',
   app_name: 'app name',
   error_message: 'abnormal message',
   error_code: 'abnormal code',
@@ -167,5 +169,9 @@ export default {
   execute_result: 'execution result',
   execute_time: 'execution time',
   last_login_ip: 'last Login IP',
-  last_login_time: 'last Login time'
+  last_login_time: 'last Login time',
+  remark: 'remark',
+  make_as_processed: 'make as processed',
+  processed: 'processed',
+  untreated: 'untreated'
 }

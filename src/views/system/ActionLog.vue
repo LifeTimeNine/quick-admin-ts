@@ -29,14 +29,14 @@
       width="60%"
     >
     <el-descriptions :column="1" border>
-      <el-descriptions-item :label="$t('permissions_node')">{{ detail.node }}</el-descriptions-item>
-      <el-descriptions-item :label="$t('action_name')">{{ detail.node_title }}</el-descriptions-item>
-      <el-descriptions-item :label="$t('action_user')">{{ detail.systemUser ? detail.systemUser.username : '' }}</el-descriptions-item>
-      <el-descriptions-item :label="$t('action_time')">{{ detail.request_time }}</el-descriptions-item>
-      <el-descriptions-item :label="$t('from_ip')">{{ detail.request_ip }}</el-descriptions-item>
-      <el-descriptions-item :label="$t('request_data')">{{ detail.request_param }}</el-descriptions-item>
-      <el-descriptions-item :label="$t('response_code')">{{ detail.response_code }}</el-descriptions-item>
-      <el-descriptions-item :label="$t('response_content')">{{ detail.response_content }}</el-descriptions-item>
+      <el-descriptions-item :label="$t('permissions_node')">{{ detail?.node }}</el-descriptions-item>
+      <el-descriptions-item :label="$t('action_name')">{{ detail?.node_title }}</el-descriptions-item>
+      <el-descriptions-item :label="$t('action_user')">{{ detail?.systemUser ? detail?.systemUser.username : '' }}</el-descriptions-item>
+      <el-descriptions-item :label="$t('action_time')">{{ detail?.request_time }}</el-descriptions-item>
+      <el-descriptions-item :label="$t('from_ip')">{{ detail?.request_ip }}</el-descriptions-item>
+      <el-descriptions-item :label="$t('request_data')">{{ detail?.request_param }}</el-descriptions-item>
+      <el-descriptions-item :label="$t('response_code')">{{ detail?.response_code }}</el-descriptions-item>
+      <el-descriptions-item :label="$t('response_content')">{{ detail?.response_content }}</el-descriptions-item>
     </el-descriptions>
       <template #footer>
         <el-button @click="detailOpened = false">{{ $t('button.close') }}</el-button>
