@@ -30,9 +30,9 @@
         <el-table-column label="ID" prop="id" width="65" sortable="custom" />
         <el-table-column :label="$t('task_name')" prop="title" min-width="100" />
         <el-table-column :label="$t('task_info')" min-width="180" v-slot="{row}">
-          <div>{{ $t('command_info') }}: <span>{{ row.command }}</span></div>
-          <div>{{ $t('params_info') }}: <span>{{ row.params ? row.params : '' }}</span></div>
-          <div>{{ $t('execute_type') }}: <span>{{ row.type === 2 ? $t('manual_execute') : row.crontab }}</span></div>
+          <div>{{ $t('command_info') }}: <span>{{ row.exec_file }}</span></div>
+          <div>{{ $t('params_info') }}: <span>{{ row.args || '' }}</span></div>
+          <div>{{ $t('execute_type') }}: <span>{{ row.type === 2 ? $t('manual_execute') : row.cron }}</span></div>
         </el-table-column>
         <el-table-column :label="$t('execute_info')" min-width="255" v-slot="{row}">
           <div>{{ $t('execute_number') }}: <span>{{ row.exec_num }}</span></div>
@@ -44,7 +44,7 @@
         </el-table-column>
         <el-table-column :label="$t('create_time')" prop="create_time" width="160" />
         <el-table-column :label="$t('action')" width="180" v-slot="{row}">
-          <el-link v-if="row.status === 1 && serverStatus.running" v-auth="$nodes.systemTask.exec" @click="$action($nodes.systemTask.exec, {id: row.id})">{{ $t('button.execute') }}</el-link>
+          <el-link v-if="serverStatus.running" v-auth="$nodes.systemTask.exec" @click="$action($nodes.systemTask.exec, {id: row.id})">{{ $t('button.execute') }}</el-link>
           <el-link v-auth="$nodes.systemTask.logList" type="info" @click="onLog(row)">{{ $t('button.log') }}</el-link>
           <el-link v-auth="$nodes.systemTask.edit" type="primary" @click="onEdit(row)">{{ $t('button.edit') }}</el-link>
           <el-link v-if="row.status === 1" v-auth="$nodes.systemTask.modifyStatus" type="warning" @click="$action($nodes.systemTask.modifyStatus, {id: row.id, enable: 0}, refresh)">{{ $t('button.disable') }}</el-link>
@@ -61,11 +61,11 @@
       <el-form-item :label="$t('task_name')" prop="title">
         <el-input v-model="row.title" />
       </el-form-item>
-      <el-form-item :label="$t('task_command')" prop="command">
-        <el-input v-model="row.command" />
+      <el-form-item :label="$t('task_command')" prop="exec_file">
+        <el-input v-model="row.exec_file" />
       </el-form-item>
-      <el-form-item :label="$t('command_params')" prop="params">
-        <el-input v-model="row.params" />
+      <el-form-item :label="$t('command_params')" prop="args">
+        <el-input v-model="row.args" />
       </el-form-item>
       <el-form-item :label="$t('task_type')" prop="type">
         <el-radio-group v-model="row.type">
@@ -73,8 +73,8 @@
           <el-radio-button :label="2">{{ $t('manual_execute') }}</el-radio-button>
         </el-radio-group>
       </el-form-item>
-      <el-form-item v-if="row.type === 1" :label="$t('timing_params')" prop="crontab" :required="true">
-        <el-input v-model="row.crontab" />
+      <el-form-item v-if="row.type === 1" :label="$t('timing_params')" prop="cron" :required="true">
+        <el-input v-model="row.cron" />
       </el-form-item>
     </form-dialog>
     <el-dialog
@@ -87,10 +87,10 @@
       <data-list :node="$nodes.systemTask.logList" :extend-query="{stid: execLogTaskId}" :hide-search="true">
         <template #list-column>
           <el-table-column label="ID" prop="id" sortable="custom" width="65" />
-          <el-table-column :label="$t('process_id')" prop="pid" min-width="90" />
-          <el-table-column :label="$t('execute_time')" prop="exec_time" min-width="160" />
+          <el-table-column :label="$t('start_time')" prop="start_time" min-width="160" />
+          <el-table-column :label="$t('end_time')" prop="end_time" min-width="160" />
           <el-table-column :label="$t('running_time')" min-width="100" v-slot="{row}">
-            {{ row.run_time }} S
+            {{ row.runtime }} S
           </el-table-column>
           <el-table-column :label="$t('execute_result')" v-slot="{row}" min-width="90">
             <el-tag v-if="row.result === 2" type="danger" size="small" effect="dark">{{ $t('fail') }}</el-tag>
@@ -140,9 +140,10 @@ const serverStatus = ref<ServerStatus>({ command: '', running: false })
 const list = ref<ComponentDataListInstance<ListItem, ListQueryParams>>()
 const formRules = {
   title: [{ required: true, trigger: 'blur', message: () => Lang.validate('input', { name: 'name' }) }],
-  command: [{ required: true, message: () => Lang.validate('input', { name: 'task_command' }), trigger: 'blur' }],
+  exec_file: [{ required: true, message: () => Lang.validate('input', { name: 'task_command' }), trigger: 'blur' }],
+  args: [{ required: true, message: () => Lang.validate('input', { name: 'command_params' }), trigger: 'blur' }],
   type: [{ required: true, message: () => Lang.validate('select', { name: 'task_type' }), trigger: 'blur' }],
-  crontab: [{
+  cron: [{
     trigger: 'blur',
     validator(rule: any, value: string, callback: Function) {
       if (form.value && form.value.row.type === 1 && !value) {
@@ -190,10 +191,10 @@ function onAdd() {
   if (form.value) {
     form.value.open({
       title: '',
-      command: '',
-      params: '',
+      exec_file: '',
+      args: '',
       type: 1,
-      crontab: ''
+      cron: ''
     })
   }
 }
@@ -202,10 +203,10 @@ function onEdit(row: ListItem) {
     form.value.open({
       id: row.id,
       title: row.title,
-      command: row.command,
-      params: row.params || '',
+      exec_file: row.exec_file,
+      args: row.args,
       type: row.type,
-      crontab: row.crontab
+      cron: row.cron
     })
   }
 }
@@ -225,7 +226,7 @@ function save(row: FormParams, shutDown: Function) {
   })
 }
 function onOutput(row: ExecLogInfo) {
-  outputContent.value = row.output
+  outputContent.value = row.out
   outputOpened.value = true
 }
 </script>

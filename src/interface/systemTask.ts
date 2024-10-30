@@ -8,28 +8,30 @@ export interface ListQueryParams extends BasicQueryParams {
 
 /** 列表数据 */
 export interface ListItem {
-  command: string
+  args: string
+  exec_file: string
   create_time: string
-  crontab: string
+  cron: string
   exec_num: number
   exec_status: number
+  fail_num: number
   id: number
   last_exec_result: number|null
   last_exec_time: number|null
-  params: string|null
   status: number
+  success_num: number
   title: string
-  type: number
+  type: 1|2
 }
 
 /** 表单参数 */
 export interface FormParams {
   id?: number
   title: string
-  command: string
-  params: string
-  type: number
-  crontab?: string
+  exec_file: string
+  args: string
+  type: 1|2
+  cron?: string
 }
 
 /** 服务状态 */
@@ -40,11 +42,11 @@ export interface ServerStatus {
 
 /** 执行日志信息 */
 export interface ExecLogInfo {
-  exec_time: string
+  start_time: string
+  end_time: string
   id: number
-  output: string
-  pid: number
+  out: string
+  err: string
   result: number
-  run_time: string
-  stid: number
+  runtime: string
 }
