@@ -39,7 +39,8 @@ export default {
   validate: {
     input: 'Please enter the {name}',
     select: 'Please select a {name}',
-    entered_password_differ: 'The entered passwords are inconsistent'
+    entered_password_differ: 'The entered passwords are inconsistent',
+    timing_params: 'timing parameters'
   },
   menu: {
     top_menu: 'top menu',
@@ -173,5 +174,9 @@ export default {
   remark: 'remark',
   make_as_processed: 'make as processed',
   processed: 'processed',
-  untreated: 'untreated'
+  untreated: 'untreated',
+  start_time: 'start time',
+  end_time: 'end time',
+  standard_output: 'standard output',
+  abnormal_output: 'abnormal output'
 }

@@ -39,7 +39,8 @@ export default {
   validate: {
     input: '请输入{name}',
     select: '请选择{name}',
-    entered_password_differ: '两次输入的密码不一致'
+    entered_password_differ: '两次输入的密码不一致',
+    timing_params: '定时参数'
   },
   menu: {
     top_menu: '顶级菜单',
@@ -173,5 +174,9 @@ export default {
   remark: '备注',
   make_as_processed: '标记为已处理',
   processed: '已处理',
-  untreated: '未处理'
+  untreated: '未处理',
+  start_time: '开始时间',
+  end_time: '结束时间',
+  standard_output: '标准输出',
+  abnormal_output: '异常输出'
 }

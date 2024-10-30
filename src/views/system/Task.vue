@@ -43,7 +43,7 @@
           <el-tag :type="row.exec_status === 1 ? 'info' : 'success'" effect="dark">{{ row.exec_status === 1 ? $t('waiting') : $t('running') }}</el-tag>
         </el-table-column>
         <el-table-column :label="$t('create_time')" prop="create_time" width="160" />
-        <el-table-column :label="$t('action')" width="180" v-slot="{row}">
+        <el-table-column :label="$t('action')" width="200" v-slot="{row}">
           <el-link v-if="serverStatus.running" v-auth="$nodes.systemTask.exec" @click="$action($nodes.systemTask.exec, {id: row.id})">{{ $t('button.execute') }}</el-link>
           <el-link v-auth="$nodes.systemTask.logList" type="info" @click="onLog(row)">{{ $t('button.log') }}</el-link>
           <el-link v-auth="$nodes.systemTask.edit" type="primary" @click="onEdit(row)">{{ $t('button.edit') }}</el-link>
@@ -69,8 +69,8 @@
       </el-form-item>
       <el-form-item :label="$t('task_type')" prop="type">
         <el-radio-group v-model="row.type">
-          <el-radio-button :label="1">{{ $t('timing_execute') }}</el-radio-button>
-          <el-radio-button :label="2">{{ $t('manual_execute') }}</el-radio-button>
+          <el-radio-button :value="1">{{ $t('timing_execute') }}</el-radio-button>
+          <el-radio-button :value="2">{{ $t('manual_execute') }}</el-radio-button>
         </el-radio-group>
       </el-form-item>
       <el-form-item v-if="row.type === 1" :label="$t('timing_params')" prop="cron" :required="true">
@@ -97,7 +97,8 @@
             <el-tag v-else-if="row.result === 1" type="success" size="small" effect="dark">{{ $t('success') }}</el-tag>
           </el-table-column>
           <el-table-column :label="$t('action')" min-width="90" v-slot="{row}">
-            <el-link type="primary" @click="onOutput(row)">{{ $t('output_content') }}</el-link>
+            <el-link type="primary" @click="onOutput(row, true)">{{ $t('standard_output') }}</el-link>
+            <el-link type="danger" @click="onOutput(row, false)">{{ $t('abnormal_output') }}</el-link>
           </el-table-column>
         </template>
       </data-list>
@@ -111,9 +112,11 @@
       width="50%"
       custom-class="task-log-dialog"
     >
-      <el-scrollbar class="task-log-output">
-        <div v-html="formatOutputContent" />
-      </el-scrollbar>
+      <div class="task-log-output-box">
+        <el-scrollbar class="task-log-output">
+          <div v-html="formatOutputContent" />
+        </el-scrollbar>
+      </div>
       <template #footer>
         <el-button @click="outputOpened = false">{{ $t('button.close') }}</el-button>
       </template>
@@ -128,7 +131,7 @@ import { add, edit, status } from '@/apis/modules/systemTask'
 import Clipboard from '@/utils/clipboard'
 import { ElLoadingService, ElMessage } from 'element-plus'
 import { Lang } from '@/lang'
-import { ComponentDataListInstance, ComponentFormDialogInstance } from '@/interface'
+import { ComponentDataListInstance, ComponentFormDialogInstance, KeyValue } from '@/interface'
 
 export default defineComponent({
   name: 'SystemTask'
@@ -147,7 +150,7 @@ const formRules = {
     trigger: 'blur',
     validator(rule: any, value: string, callback: Function) {
       if (form.value && form.value.row.type === 1 && !value) {
-        return callback(new Error(Lang.validate('input', { name: 'timing_paras' })))
+        return callback(new Error(Lang.validate('input', { name: 'timing_params' })))
       }
       return true
     }
@@ -225,8 +228,8 @@ function save(row: FormParams, shutDown: Function) {
     loading.close()
   })
 }
-function onOutput(row: ExecLogInfo) {
-  outputContent.value = row.out
+function onOutput(row: ExecLogInfo, isStandardOutput: boolean) {
+  outputContent.value = isStandardOutput ? row.out : row.err
   outputOpened.value = true
 }
 </script>
@@ -242,21 +245,18 @@ function onOutput(row: ExecLogInfo) {
     margin-left: 2em;
   }
 }
-</style>
 
-<style lang="scss">
-.task-log-dialog {
-  .el-dialog__body {
-    background-color: #303133;
-    .task-log-output {
-      height: 220px;
-      .el-scrollbar__wrap {
-        overflow-x: hidden;
-        .el-scrollbar__view {
-          color: #C0C4CC;
-          font-size: 12px;
-          line-height: 1.4em;
-        }
+:deep() .task-log-output-box {
+  background-color: #303133;
+  .task-log-output {
+    height: 220px;
+    padding: 1em;
+    .el-scrollbar__wrap {
+      overflow-x: hidden;
+      .el-scrollbar__view {
+        color: #C0C4CC;
+        font-size: 12px;
+        line-height: 1.4em;
       }
     }
   }
