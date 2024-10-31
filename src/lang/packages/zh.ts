@@ -178,5 +178,6 @@ export default {
   start_time: '开始时间',
   end_time: '结束时间',
   standard_output: '标准输出',
-  abnormal_output: '异常输出'
+  abnormal_output: '异常输出',
+  next_exec_time: '下一次执行时间'
 }

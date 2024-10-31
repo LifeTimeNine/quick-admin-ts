@@ -34,10 +34,27 @@
           <div>{{ $t('params_info') }}: <span>{{ row.args || '' }}</span></div>
           <div>{{ $t('execute_type') }}: <span>{{ row.type === 2 ? $t('manual_execute') : row.cron }}</span></div>
         </el-table-column>
-        <el-table-column :label="$t('execute_info')" min-width="255" v-slot="{row}">
-          <div>{{ $t('execute_number') }}: <span>{{ row.exec_num }}</span></div>
-          <div>{{ $t('last_execute_time') }}: <span>{{ row.last_exec_time }}</span></div>
-          <div>{{ $t('last_execute_result') }}: <el-tag v-if="row.last_exec_result" :type="row.last_exec_result === 1 ? 'success' : 'danger'">{{ row.last_exec_result === 1 ? $t('success') : $t('fail') }}</el-tag></div>
+        <el-table-column :label="$t('execute_info')" min-width="210" v-slot="{row}">
+          <div>
+            {{ $t('last_execute_result') }}: 
+            <el-popover
+              placement="top-start"
+              trigger="hover"
+              :width="160"
+              :content="row.last_exec_time">
+              <template #reference>
+                <el-tag v-if="row.last_exec_result" :type="row.last_exec_result === 1 ? 'success' : 'danger'" style="cursor: pointer;">
+                  {{ row.last_exec_result === 1 ? $t('success') : $t('fail') }}
+                </el-tag>
+              </template>
+            </el-popover>
+          </div>
+          <div>
+            {{ $t('next_exec_time') }}: {{ row.next_exec_time }}
+          </div>
+          <div>
+            {{ $t('execute_number') }}: <span>{{ row.exec_num }}</span> / <el-text type="success">{{ row.success_num }}</el-text> / <el-text type="danger">{{ row.fail_num }}</el-text>
+          </div>
         </el-table-column>
         <el-table-column :label="$t('current_status')" min-width="120" v-slot="{row}">
           <el-tag :type="row.exec_status === 1 ? 'info' : 'success'" effect="dark">{{ row.exec_status === 1 ? $t('waiting') : $t('running') }}</el-tag>
@@ -131,7 +148,7 @@ import { add, edit, status } from '@/apis/modules/systemTask'
 import Clipboard from '@/utils/clipboard'
 import { ElLoadingService, ElMessage } from 'element-plus'
 import { Lang } from '@/lang'
-import { ComponentDataListInstance, ComponentFormDialogInstance, KeyValue } from '@/interface'
+import { ComponentDataListInstance, ComponentFormDialogInstance } from '@/interface'
 
 export default defineComponent({
   name: 'SystemTask'

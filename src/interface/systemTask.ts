@@ -17,7 +17,8 @@ export interface ListItem {
   fail_num: number
   id: number
   last_exec_result: number|null
-  last_exec_time: number|null
+  last_exec_time: string|null
+  next_exec_time: string|null
   status: number
   success_num: number
   title: string
