@@ -41,6 +41,9 @@
                 </el-descriptions>
               </el-scrollbar>
             </template>
+            <template v-if="item.type === ValueType.IMG">
+              <el-image :src="item.value" fit="fill" :lazy="true" />
+            </template>
           </div>
         </el-card>
       </el-col>
@@ -87,6 +90,9 @@
               </el-descriptions-item>
             </el-descriptions>
           </el-scrollbar>
+        </template>
+        <template v-if="row.type === ValueType.IMG">
+          <upload v-model="row.value" :width="60" :height="60" accept="image/*" />
         </template>
       </el-form-item>
     </form-dialog>
@@ -195,6 +201,14 @@ function save(row: ItemInfo, shutDown: Function) {
   }
   .el-scrollbar {
     width: 100%;
+  }
+  .el-image {
+    text-align: center;
+    :deep() .el-image__inner {
+      width: 60%;
+      height: 60%;
+      margin: 0 auto;
+    }
   }
 }
 

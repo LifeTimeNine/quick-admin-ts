@@ -45,7 +45,7 @@
           <svg-icon icon-class="plus" />
         </div>
       </el-upload>
-      <el-image-viewer v-if="imagePreviewOpened" :initial-index="imagePreviewIndex" :url-list="usableList" @close="imagePreviewClose" />
+      <el-image-viewer v-if="imagePreviewOpened" :initial-index="imagePreviewIndex" :url-list="usableList" fit="fill" @close="imagePreviewClose" />
     </div>
   </div>
 </template>

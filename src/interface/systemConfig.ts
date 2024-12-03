@@ -2,7 +2,8 @@
 export enum ValueType {
   TEXT = 1,
   LIST = 2,
-  MAP = 3
+  MAP = 3,
+  IMG = 4
 }
 
 /** 基础配置接口 */
