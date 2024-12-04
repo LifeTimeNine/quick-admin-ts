@@ -41,7 +41,7 @@
                 </el-descriptions>
               </el-scrollbar>
             </template>
-            <template v-if="item.type === ValueType.IMG">
+            <template v-else-if="item.type === ValueType.IMG">
               <el-image :src="item.value" fit="fill" :lazy="true" />
             </template>
           </div>
@@ -91,7 +91,7 @@
             </el-descriptions>
           </el-scrollbar>
         </template>
-        <template v-if="row.type === ValueType.IMG">
+        <template v-else-if="row.type === ValueType.IMG">
           <upload v-model="row.value" :width="60" :height="60" accept="image/*" />
         </template>
       </el-form-item>
@@ -100,7 +100,7 @@
 </template>
 
 <script lang="ts">
-import { list as getList, add, edit } from '@/apis/modules/systemConfig'
+import { list as getList, edit } from '@/apis/modules/systemConfig'
 import { ComponentFormDialogInstance, KeyValue } from '@/interface'
 import { ItemInfo } from '@/interface/systemConfig'
 import { Lang } from '@/lang'
@@ -172,8 +172,7 @@ function save(row: ItemInfo, shutDown: Function) {
     })
     row.value = map
   }
-  const promise = row.id ? edit(row) : add(row)
-  promise.then(() => {
+  edit({ id: row.id as number, key: row.key, value: row.value }).then(() => {
     ElMessage.success(Lang.message('save_success'))
     shutDown()
     init()

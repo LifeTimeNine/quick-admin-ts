@@ -28,3 +28,10 @@ export interface ItemInfo {
   type: number
   value: Value
 }
+
+/** 保存表单 */
+export interface SaveForm {
+  id: number
+  key: string
+  value: Value
+}
