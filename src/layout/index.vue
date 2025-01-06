@@ -54,6 +54,7 @@ const sidebarOpened = computed<boolean>(() => {
   }
   .el-main {
     position: relative;
+    z-index: 0;
     padding: 0;
   }
 }
